@@ -2,16 +2,17 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var logger = require('morgan');
-const passport= require("passport")
-const config = require("./config")
+const passport= require("passport");
+const config = require("./config");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-const campsiteRouter = require("./routes/campsiteRouter")
-const promotionRouter = require("./routes/promotionRouter")
-const partnersRouter = require("./routes/partnersRouter")
+const campsiteRouter = require("./routes/campsiteRouter");
+const promotionRouter = require("./routes/promotionRouter");
+const partnersRouter = require("./routes/partnersRouter");
+const uploadRouter = require('./routes/uploadRouter');
 
-const mongoose= require("mongoose")
+const mongoose= require("mongoose");
 
 const url = config.mongoUrl
 const connect = mongoose.connect(url,{
@@ -53,16 +54,17 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use(passport.initialize())
+app.use(passport.initialize());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use("/campsites", campsiteRouter)
-app.use("/promotions", promotionRouter)
-app.use("/partners", partnersRouter)
+app.use("/campsites", campsiteRouter);
+app.use("/promotions", promotionRouter);
+app.use("/partners", partnersRouter);
+app.use('/imageUpload', uploadRouter);
 
 app.use(function(req, res, next) {
   next(createError(404));
